@@ -1,58 +1,67 @@
 const express = require('express');
 const app = express();
-app.use(express.json()); // Para que a API receba dados no formato JSON
+app.use(express.json()); // For the "API" to receive data in JSON format
 
-const contatos = ["Huguinho", "Zezinho", "Luizinho", "Zequinha"];
+// This array is simulating a database  
+const contacts = ["Huguinho", "Zezinho", "Luizinho", "Zequinha"];
 
-
-function valContato(req, res, next) {
+// Middleware function
+function validateContact(req, res, next) {
   if (!req.body.name) {
     return res.status(400).json({
-      error: "Necessário enviar o nome!"
+      error: "It's necessary to send the name!"
     })
   }
   return next();
 }
 
-function valPosContato(req, res, next) {
-  if (!contatos[req.params.id]) {
+// Middleware function
+function validateContactPosition(req, res, next) {
+  if (!contacts[req.params.id]) {
     return res.status(400).json({
-      error: "Contato não encontrado"
+      error: "Contact not found"
     })
   }
   return next();
 }
 
-app.get('/', (req, res) => {
-  res.json(contatos);
+// CREATE
+app.post('/contacts', validateContact, (req, res) => {
+  const { name } = req.body;
+  contacts.push(name);
+  return res.json(contacts);
 });
 
-app.get('/contatos/:id', valPosContato, (req, res) => {
+
+// READ
+app.get('/', (req, res) => {
+  res.json(contacts);
+});
+
+app.get('/contacts/:id', validateContactPosition, (req, res) => {
   const { id } = req.params;
   return res.json({ 
-    name: contatos[id], 
+    name: contacts[id], 
   });
 });
 
-app.post('/contatos', valContato, (req, res) => {
-  const { name } = req.body;
-  contatos.push(name);
-  return res.json(contatos);
-});
 
-app.put('/contatos/:id', valPosContato, (req, res) => {
+// UPDATE
+app.put('/contacts/:id', validateContactPosition, (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
-  contatos[id] = name;
-  return res.json(contatos);
+  contacts[id] = name;
+  return res.json(contacts);
 
 });
 
-app.delete('/contatos/:id', valPosContato, (req, res) => {
+// DELETE
+app.delete('/contacts/:id', validateContactPosition, (req, res) => {
   const { id } = req.params;
-  contatos.splice(id, 1);
-  return res.json(contatos);
+  contacts.splice(id, 1);
+  return res.json(contacts);
 });
+
 
 app.listen(8080, () => {
   console.log('Server running in port 8080');
