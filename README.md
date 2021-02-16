@@ -1,5 +1,5 @@
 ## CRUD BASIC
-Made by Node.js (v14.15.5) and Express
+Made by Node.js (v14.15.5), Express and Insomnia
 
 download dependencies
 ### npm install 
