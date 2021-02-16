@@ -10,17 +10,28 @@ app.get('/', (req, res) => {
 
 app.get('/contatos/:id', (req, res) => {
   const { id } = req.params;
-  const { situacao } = req.query;
   return res.json({ 
-    id, 
-    name: "Paulo", 
-    situacao 
+    name: contatos[id], 
   });
 });
 
 app.post('/contatos', (req, res) => {
   const { name } = req.body;
   contatos.push(name);
+  return res.json(contatos);
+});
+
+app.put('/contatos/:id', (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+  contatos[id] = name;
+  return res.json(contatos);
+
+});
+
+app.delete('/contatos/:id', (req, res) => {
+  const { id } = req.params;
+  contatos.splice(id, 1);
   return res.json(contatos);
 });
 
