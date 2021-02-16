@@ -3,12 +3,7 @@ const app = express();
 app.use(express.json()); // Para que a API receba dados no formato JSON
 
 const contatos = ["Huguinho", "Zezinho", "Luizinho", "Zequinha"];
-/*
-app.use((req, res, next) => {
-  console.log('Acessou o middleware');
-  next();
-});
-*/
+
 
 function valContato(req, res, next) {
   if (!req.body.name) {
